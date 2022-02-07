@@ -54,5 +54,23 @@ router.get(`/name/:forename`, async (req, res, next) => {
         });
 });
 
+router.get(`/suspect/PeteHutchison`, async (req, res, next) => {
+    const name = req.params.forename;
+    const bioinfo = await sequelize.query(`SELECT * FROM DBFinalProj.citizen WHERE forenames='Peter' AND surname='Hutchison';`, { type: sequelize.QueryTypes.SELECT }); //TYPE: INCLUDED AS WILL DOUBLE THE RETURNED RESULTS FOR WHATEVER REASON
+    const whatever = await sequelize.query(`bio info `, { type: sequelize.QueryTypes.SELECT });
+    res.send({ bioinfo });
+    // .then((result) => {
+    //     res.status(201).send(result);
+    // })
+    // .catch((err) => {
+    //     res.status(500).send({
+    //         message:
+    //             err.message || "An error occcurred while retrieving data"
+    //     });
+    // });
+});
+
+
+
 
 module.exports = router;
