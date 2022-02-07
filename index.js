@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/test', routes);
+app.use('/suspect', routes);
 
 const server = app.listen(5015, () => {
     console.log('server started');
