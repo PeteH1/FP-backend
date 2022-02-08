@@ -35,7 +35,7 @@ router.get(`/:name`, async (req, res, next) => {
     const surname = req.params.name.split(' ')[1];
     try {
         const bioInfo = await sequelize.query(`SELECT * FROM DBFinalProj.citizen where forenames like ? and surname = ?; `, { replacements: [`%${firstName}%`, surname],  type: sequelize.QueryTypes.SELECT })
-        res.status(201).send(bioInfo);
+        res.status(200).send(bioInfo);
     } catch (error) {
         res.status(500).send({
             message:
@@ -66,7 +66,7 @@ router.get(`/:citizenId`, async (req, res, next) => {
             
             `  ;`, { replacements: citizenId,  type: sequelize.QueryTypes.SELECT })
 
-        res.status(201).send({a, b, c, d});
+        res.status(200).send({a, b, c, d});
 
     } catch (error) {
         res.status(500).send({
