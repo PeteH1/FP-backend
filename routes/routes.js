@@ -103,10 +103,6 @@ router.get(`/:citizenId`, async (req, res, next) => {
             JOIN DBFinalProj.atmpoint atmp ON atmt.atm_id=atmp.atm_id
             WHERE c.citizen_id=?;`, { replacements: citizenId, type: sequelize.QueryTypes.SELECT })
 
-        const eposTransactions = await sequelize.query(
-
-            ``, { replacements: citizenId, type: sequelize.QueryTypes.SELECT })
-
         res.status(201).send({ citizenPassport, callsReceived, callsMade, anprSightings, eposTransactions, atmTransactions });
 
     } catch (error) {
