@@ -29,8 +29,9 @@ router.get(`/readById/:citizenId`, async (req, res, next) => {
 
         const callsReceived = await sequelize.query(
 
-            `SELECT mcr.timestamp, mcr.caller_msisdn, mcr.receiver_msisdn, ct.latitude, ct.longitude FROM DBFinalProj.mobilecallrecords mcr
+            `SELECT mcr.timestamp, pm.forenames, pm.surname, mcr.caller_msisdn, mcr.receiver_msisdn, ct.latitude, ct.longitude FROM DBFinalProj.mobilecallrecords mcr
             JOIN DBFinalProj.celltower ct ON mcr.receiver_tower_id=ct.cell_tower_id
+            JOIN DBFinalProj.peoplemobile pm ON mcr.caller_msisdn=pm.phone_number
             WHERE mcr.receiver_msisdn=(SELECT phone_number FROM DBFinalProj.peoplemobile pm 
             JOIN DBFinalProj.citizen c ON c.forenames=pm.forenames AND c.surname=pm.surname AND c.date_of_birth=pm.date_of_birth AND c.home_address=pm.address
             WHERE citizen_id= :citizenid )
@@ -38,8 +39,9 @@ router.get(`/readById/:citizenId`, async (req, res, next) => {
 
         const callsMade = await sequelize.query(
 
-            `SELECT mcr.timestamp, mcr.caller_msisdn, mcr.receiver_msisdn, ct.latitude, ct.longitude FROM DBFinalProj.mobilecallrecords mcr
+            `SELECT mcr.timestamp, pm.forenames, pm.surname, mcr.caller_msisdn, mcr.receiver_msisdn, ct.latitude, ct.longitude FROM DBFinalProj.mobilecallrecords mcr
             JOIN DBFinalProj.celltower ct ON mcr.call_cell_tower_id=ct.cell_tower_id
+            JOIN DBFinalProj.peoplemobile pm ON mcr.receiver_msisdn=pm.phone_number
             WHERE mcr.caller_msisdn=(SELECT phone_number FROM DBFinalProj.peoplemobile pm 
             JOIN DBFinalProj.citizen c ON c.forenames=pm.forenames AND c.surname=pm.surname AND c.date_of_birth=pm.date_of_birth AND c.home_address=pm.address
             WHERE citizen_id= :citizenid )
@@ -51,7 +53,7 @@ router.get(`/readById/:citizenId`, async (req, res, next) => {
             JOIN DBFinalProj.anprcamera a ON vo.anpr_point_id = a.anpr_id
             JOIN DBFinalProj.vehicleregistration vr ON vo.vehicle_registration_no = vr.vehicle_registration_no
             JOIN DBFinalProj.citizen c ON c.forenames = vr.forenames AND c.surname = vr.surname AND c.home_address = vr.address AND c.date_of_birth = vr.date_of_birth
-            WHERE c.citizen_id= :citizenid ;`,{ replacements: { citizenid: citizenId }, type: sequelize.QueryTypes.SELECT })
+            WHERE c.citizen_id= :citizenid ;`, { replacements: { citizenid: citizenId }, type: sequelize.QueryTypes.SELECT })
 
         const eposTransactions = await sequelize.query(
 
@@ -79,10 +81,8 @@ router.get(`/readById/:citizenId`, async (req, res, next) => {
         res.status(500).send({
             message:
                 error.message || "An error occcurred while retrieving data"
-
         });
     };
 });
-
 
 module.exports = router;
