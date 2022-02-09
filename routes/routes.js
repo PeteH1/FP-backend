@@ -81,10 +81,8 @@ router.get(`/readById/:citizenId`, async (req, res, next) => {
         res.status(500).send({
             message:
                 error.message || "An error occcurred while retrieving data"
-
         });
     };
 });
-
 
 module.exports = router;
