@@ -6,7 +6,7 @@ router.get(`/search/:name`, async (req, res, next) => {
     const surname = req.params.name.split(' ')[1];
     try {
         const bioInfo = await sequelize.query(`SELECT * FROM DBFinalProj.citizen where forenames like ? and surname = ?; `, { replacements: [`%${firstName}%`, surname], type: sequelize.QueryTypes.SELECT })
-        res.status(201).send(bioInfo);
+        res.status(200).send(bioInfo);
     } catch (error) {
         res.status(500).send({
             message:
@@ -23,7 +23,7 @@ router.get(`/regsearch/:reg`, async (req, res, next) => {
         JOIN DBFinalProj.vehicleregistration vr ON 
         c.forenames=vr.forenames AND c.surname=vr.surname AND c.home_address=vr.address AND c.date_of_birth=vr.date_of_birth
         WHERE vr.vehicle_registration_no=?;`, { replacements: [reg], type: sequelize.QueryTypes.SELECT })
-        res.status(201).send(regBioInfo);
+        res.status(200).send(regBioInfo);
     } catch (error) {
         res.status(500).send({
             message:
@@ -92,7 +92,7 @@ router.get(`/readById/:citizenId`, async (req, res, next) => {
             JOIN DBFinalProj.atmpoint atmp ON atmt.atm_id=atmp.atm_id
             WHERE c.citizen_id= :citizenid ;`, { replacements: { citizenid: citizenId }, type: sequelize.QueryTypes.SELECT })
 
-        res.status(201).send({ citizenPassport, callsReceived, callsMade, anprSightings, eposTransactions, atmTransactions });
+        res.status(200).send({ citizenPassport, callsReceived, callsMade, anprSightings, eposTransactions, atmTransactions });
 
     } catch (error) {
         res.status(500).send({
