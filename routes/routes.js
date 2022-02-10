@@ -15,6 +15,23 @@ router.get(`/search/:name`, async (req, res, next) => {
     };
 });
 
+router.get(`/regsearch/:reg`, async (req, res, next) => {
+    const reg = req.params.reg;
+    try {
+        const regBioInfo = await sequelize.query(`SELECT c.citizen_id, c.forenames, c.surname, c.home_address, c.date_of_birth, 
+        c.place_of_birth, c.sex, vr.vehicle_registration_no, vr.make, vr.model, vr.colour FROM DBFinalProj.citizen c
+        JOIN DBFinalProj.vehicleregistration vr ON 
+        c.forenames=vr.forenames AND c.surname=vr.surname AND c.home_address=vr.address AND c.date_of_birth=vr.date_of_birth
+        WHERE vr.vehicle_registration_no='?';`, { replacements: [`%${reg}%`], type: sequelize.QueryTypes.SELECT })
+        res.status(201).send(regBioInfo);
+    } catch (error) {
+        res.status(500).send({
+            message:
+                error.message || "An error occcurred while retrieving data"
+        });
+    };
+});
+
 router.get(`/readById/:citizenId`, async (req, res, next) => {
 
     const citizenId = req.params.citizenId;
